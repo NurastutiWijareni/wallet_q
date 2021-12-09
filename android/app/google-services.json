@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "323597656274",
+    "project_id": "walletq-1387d",
+    "storage_bucket": "walletq-1387d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323597656274:android:544c4f6680f014bcb28d0b",
+        "android_client_info": {
+          "package_name": "com.example.wallet_q"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323597656274-k5aj1tv3sts3hgq4laehi86h0kkmei2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgd8S3Fsh9QaYHuSFtuzi6l7dkxrQ9wEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323597656274-k5aj1tv3sts3hgq4laehi86h0kkmei2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
