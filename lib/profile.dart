@@ -51,8 +51,8 @@ class _ProfileState extends State<Profile> {
 
         users = value;
 
-        if (value.profilePicture != "") {
-          picture = value.profilePicture;
+        if (users!.profilePicture != "") {
+          picture = users!.profilePicture;
         }
 
         isLoaded = true;
@@ -207,96 +207,60 @@ class _ProfileState extends State<Profile> {
                                     nameController.text.trim() != "" &&
                                     noTelpController.text.trim() != "")) {
                                   Get.snackbar(
-                                    "Pesan",
-                                    "Silahkan Isi Seluruh Data Yang Diminta",
-                                    snackPosition: SnackPosition.TOP,
+                                    "Perhatian",
+                                    "Silakan isi seluruh data yang diminta",
+                                    snackPosition: SnackPosition.BOTTOM,
                                     isDismissible: false,
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Color(0xFFEEE5FF),
                                     duration: const Duration(seconds: 3),
-                                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                                     colorText: Colors.black,
-                                    borderRadius: 0,
+                                    borderRadius: 16,
                                   );
                                 } else if (!RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(noTelpController.text)) {
                                   Get.snackbar(
-                                    "Pesan",
-                                    "Format no telepon tidak sesuai",
-                                    snackPosition: SnackPosition.TOP,
+                                    "Perhatian",
+                                    "Silakan masukkan nomor telepon yang valid",
+                                    snackPosition: SnackPosition.BOTTOM,
                                     isDismissible: false,
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Color(0xFFEEE5FF),
                                     duration: const Duration(seconds: 3),
-                                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                                    margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                                     colorText: Colors.black,
-                                    borderRadius: 0,
+                                    borderRadius: 16,
                                   );
                                 } else if (profilePicture == null) {
                                   setState(() {
                                     isPressed = !isPressed;
                                   });
-                                  String profileLink = "";
-                                  await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
-                                      noTelpController.text, profileLink);
+                                  if (users!.profilePicture == "") {
+                                    String profileLink = "";
+                                    await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
+                                        noTelpController.text, profileLink);
+                                  } else {
+                                    await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
+                                        noTelpController.text, users!.profilePicture);
+                                  }
                                   setState(() {
                                     isLoaded = false;
                                     isPressed = !isPressed;
                                   });
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        backgroundColor: Color(0xFF14FF00),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                        elevation: 16,
-                                        content: Container(
-                                          height: 250,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Lottie.asset("assets/lotties/check.json", height: 200),
-                                              Text(
-                                                "Data Berhasil DIganti",
-                                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
+                                  dialog(context);
                                 } else {
                                   setState(() {
                                     isPressed = !isPressed;
                                   });
                                   String profileLink = await uploadImage(profilePicture);
+                                  if (users!.profilePicture != "") {
+                                    await deleteFileFromFirebaseByUrl(users!.profilePicture);
+                                  }
                                   await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
                                       noTelpController.text, profileLink);
                                   setState(() {
                                     isLoaded = false;
                                     isPressed = !isPressed;
                                   });
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        backgroundColor: Color(0xFF14FF00),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                        elevation: 16,
-                                        content: Container(
-                                          height: 250,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Lottie.asset("assets/lotties/check.json", height: 200),
-                                              Text(
-                                                "Data Berhasil DIganti",
-                                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
+                                  dialog(context);
                                 }
                               },
                               provideHapticFeedback: true,
@@ -360,10 +324,10 @@ class _ProfileState extends State<Profile> {
                                                     Get.snackbar(
                                                       "Perhatian",
                                                       result.message,
-                                                      snackPosition: SnackPosition.TOP,
+                                                      snackPosition: SnackPosition.BOTTOM,
                                                       isDismissible: false,
                                                       backgroundColor: Color(0xFFEEE5FF),
-                                                      duration: const Duration(seconds: 10),
+                                                      duration: const Duration(seconds: 3),
                                                       margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                                                       colorText: Colors.black,
                                                       borderRadius: 16,
@@ -439,6 +403,32 @@ class _ProfileState extends State<Profile> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> dialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Color(0xFF14FF00),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 16,
+          content: Container(
+            height: 250,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset("assets/lotties/check.json", height: 200),
+                Text(
+                  "Data Berhasil Diganti",
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

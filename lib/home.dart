@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_q/dream_saver.dart';
 import 'package:wallet_q/profile.dart';
+import 'package:wallet_q/reminder.dart';
+import 'package:wallet_q/target_tabungan.dart';
 
+import 'tabungan/tabungan.dart';
+import 'tabungan/tabungan_services.dart';
 import 'users.dart';
 import 'auth_services.dart';
 import 'on_boarding_page.dart';
@@ -19,6 +24,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Users? users;
+  List tabungans = [];
+  int amount = 0;
+  int income = 0;
+  int expense = 0;
+  bool _isIncome = false, isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +40,28 @@ class _HomeState extends State<Home> {
         } catch (e) {}
       },
     );
+
+    if (!isLoaded) {
+      TabungansServices.readTabungan(user.uid).then((value) {
+        tabungans = value;
+        amount = 0;
+        income = 0;
+        expense = 0;
+
+        tabungans.forEach((element) {
+          if (element.category == "Pemasukan") {
+            income += element.amount as int;
+            amount += element.amount as int;
+          } else {
+            expense += element.amount as int;
+            amount -= element.amount as int;
+          }
+        });
+        isLoaded = true;
+
+        setState(() {});
+      });
+    }
 
     AppBar appBar = AppBar(
       backgroundColor: Colors.transparent,
@@ -226,10 +258,10 @@ class _HomeState extends State<Home> {
                                   textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ),
-                          Divider(
-                            height: 1,
-                            color: Colors.black,
-                          ),
+                          // Divider(
+                          //   height: 1,
+                          //   color: Colors.black,
+                          // ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: ElevatedButton(
@@ -262,10 +294,10 @@ class _HomeState extends State<Home> {
                                   textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ),
-                          Divider(
-                            height: 1,
-                            color: Colors.black,
-                          ),
+                          // Divider(
+                          //   height: 1,
+                          //   color: Colors.black,
+                          // ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: ElevatedButton(
@@ -298,10 +330,10 @@ class _HomeState extends State<Home> {
                                   textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ),
-                          Divider(
-                            height: 1,
-                            color: Colors.black,
-                          ),
+                          // Divider(
+                          //   height: 1,
+                          //   color: Colors.black,
+                          // ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: ElevatedButton(
@@ -337,10 +369,10 @@ class _HomeState extends State<Home> {
                                   textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ),
-                          Divider(
-                            height: 1,
-                            color: Colors.black,
-                          ),
+                          // Divider(
+                          //   height: 1,
+                          //   color: Colors.black,
+                          // ),
                         ],
                       ),
                     ),
@@ -358,8 +390,8 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 10,
-                  child: const Text(
-                    "Saldo Yang Dimiliki\nRp. x.xxx.xxx",
+                  child: Text(
+                    "Saldo Yang Dimiliki\n Rp. ${amount.toString()}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Inter",
@@ -401,9 +433,22 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         height: 50,
                       ),
-                      MenuButton(
-                        image: "assets/images/13.png",
-                        text: "Tabungan",
+                      Row(
+                        children: [
+                          MenuButton(
+                            image: "assets/images/13.png",
+                            text: "Tabungan",
+                            toPage: "Tabungan",
+                          ),
+                          SizedBox(
+                            width: 50,
+                          ),
+                          MenuButton(
+                            image: "assets/images/14.png",
+                            text: "Target Tabungan",
+                            toPage: "Target Tabungan",
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -418,10 +463,11 @@ class _HomeState extends State<Home> {
 }
 
 class MenuButton extends StatelessWidget {
-  const MenuButton({Key? key, this.image, this.text}) : super(key: key);
+  const MenuButton({Key? key, this.image, this.text, this.toPage}) : super(key: key);
 
   final String? image;
   final String? text;
+  final String? toPage;
 
   @override
   Widget build(BuildContext context) {
@@ -429,7 +475,17 @@ class MenuButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 2 - 56,
       height: MediaQuery.of(context).size.height / 4,
       child: NeumorphicButton(
-        onPressed: () async {},
+        onPressed: () async {
+          if (toPage == "Target Tabungan") {
+            Get.to(() => TargetTabungan());
+          } else if (toPage == "Dream Saver") {
+            Get.to(() => DreamSaver());
+          } else if (toPage == "Reminder") {
+            Get.to(() => Reminder());
+          } else if (toPage == "Tabungan") {
+            Get.to(() => Tabungan());
+          }
+        },
         provideHapticFeedback: true,
         style: NeumorphicStyle(
           shape: NeumorphicShape.flat,
@@ -449,7 +505,7 @@ class MenuButton extends StatelessWidget {
             ),
             Text(
               text!,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: "Inter",
                 fontSize: 16,

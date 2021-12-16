@@ -145,10 +145,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         Get.snackbar(
                           "Perhatian",
                           "Silakan isi seluruh data",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
                           backgroundColor: Color(0xFFEEE5FF),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                           colorText: Colors.black,
                           borderRadius: 16,
@@ -157,10 +157,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         Get.snackbar(
                           "Perhatian",
                           "Panjang password minimal 8 karakter",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
                           backgroundColor: Color(0xFFEEE5FF),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                           colorText: Colors.black,
                           borderRadius: 16,
@@ -169,10 +169,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         Get.snackbar(
                           "Perhatian",
                           "Password yang anda masukkan tidak sesuai",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
                           backgroundColor: Color(0xFFEEE5FF),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                           colorText: Colors.black,
                           borderRadius: 16,
@@ -181,10 +181,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         Get.snackbar(
                           "Perhatian",
                           "Silakan masukkan email anda",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
                           backgroundColor: Color(0xFFEEE5FF),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                           colorText: Colors.black,
                           borderRadius: 16,
@@ -198,14 +198,17 @@ class _SignUpFormState extends State<SignUpForm> {
                           Get.snackbar(
                             "Perhatian",
                             result.message,
-                            snackPosition: SnackPosition.TOP,
+                            snackPosition: SnackPosition.BOTTOM,
                             isDismissible: false,
                             backgroundColor: Color(0xFFEEE5FF),
-                            duration: const Duration(seconds: 10),
+                            duration: const Duration(seconds: 3),
                             margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
                             colorText: Colors.black,
                             borderRadius: 16,
                           );
+                          setState(() {
+                            isPressed = !isPressed;
+                          });
                         } else {
                           UsersServices.createUser(result.user!.uid, result.user!.email, nameController.text, "", "", "");
                           Get.offAll(() => const Home());

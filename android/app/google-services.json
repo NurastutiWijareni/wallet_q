@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "323597656274",
-    "project_id": "walletq-1387d",
-    "storage_bucket": "walletq-1387d.appspot.com"
+    "project_number": "1028706313373",
+    "project_id": "ewalletq-c5bdc",
+    "storage_bucket": "ewalletq-c5bdc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:323597656274:android:544c4f6680f014bcb28d0b",
+        "mobilesdk_app_id": "1:1028706313373:android:c72fff8a4ab47a7b272074",
         "android_client_info": {
           "package_name": "com.example.wallet_q"
         }
       },
       "oauth_client": [
         {
-          "client_id": "323597656274-k5aj1tv3sts3hgq4laehi86h0kkmei2e.apps.googleusercontent.com",
+          "client_id": "1028706313373-pj464jj45dqvnssipm7c5dtgvmqnjoui.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDgd8S3Fsh9QaYHuSFtuzi6l7dkxrQ9wEk"
+          "current_key": "AIzaSyABh-WB2-vVdROeNEIMGTr6uXuqeamHFI0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "323597656274-k5aj1tv3sts3hgq4laehi86h0kkmei2e.apps.googleusercontent.com",
+              "client_id": "1028706313373-pj464jj45dqvnssipm7c5dtgvmqnjoui.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
