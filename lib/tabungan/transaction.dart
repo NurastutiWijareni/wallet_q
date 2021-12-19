@@ -27,7 +27,7 @@ class MyTransaction extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey[500]),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.pink[200]),
                     child: Center(
                       child: Icon(
                         Icons.attach_money_outlined,
@@ -38,17 +38,22 @@ class MyTransaction extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(transactionName,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 50,
+                    child: Text(
+                      transactionName,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[700],
-                      )),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Text(
                 (expenseOrIncome == 'Pengeluaran' ? '-' : '+') + '\Rp. ' + money,
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                   fontSize: 16,
                   color: expenseOrIncome == 'Pengeluaran' ? Colors.red : Colors.green,
                 ),

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet_q/dream_saver.dart';
+import 'package:wallet_q/dream%20saver/dream_saver_view.dart';
 import 'package:wallet_q/profile.dart';
 import 'package:wallet_q/reminder.dart';
-import 'package:wallet_q/target_tabungan.dart';
+import 'package:wallet_q/target%20tabungan/target_tabungan.dart';
 
+import 'dream saver/dream_saver.dart';
 import 'tabungan/tabungan.dart';
 import 'tabungan/tabungan_services.dart';
 import 'users.dart';
@@ -391,7 +392,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 10,
                   child: Text(
-                    "Saldo Yang Dimiliki\n Rp. ${amount.toString()}",
+                    "Saldo Yang Dimiliki\n Rp. ${(amount < 0) ? 0 : amount.toString()}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Inter",
@@ -420,6 +421,7 @@ class _HomeState extends State<Home> {
                           MenuButton(
                             image: "assets/images/11.png",
                             text: "Dream Saver",
+                            toPage: "Dream Saver",
                           ),
                           SizedBox(
                             width: 50,
@@ -479,7 +481,7 @@ class MenuButton extends StatelessWidget {
           if (toPage == "Target Tabungan") {
             Get.to(() => TargetTabungan());
           } else if (toPage == "Dream Saver") {
-            Get.to(() => DreamSaver());
+            Get.to(() => DreamSaverView());
           } else if (toPage == "Reminder") {
             Get.to(() => Reminder());
           } else if (toPage == "Tabungan") {
@@ -508,7 +510,7 @@ class MenuButton extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: "Inter",
-                fontSize: 16,
+                fontSize: 14,
                 color: Colors.black,
                 fontWeight: FontWeight.w600,
               ),

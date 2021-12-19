@@ -209,7 +209,7 @@ class _ProfileState extends State<Profile> {
                                   Get.snackbar(
                                     "Perhatian",
                                     "Silakan isi seluruh data yang diminta",
-                                    snackPosition: SnackPosition.BOTTOM,
+                                    snackPosition: SnackPosition.TOP,
                                     isDismissible: false,
                                     backgroundColor: Color(0xFFEEE5FF),
                                     duration: const Duration(seconds: 3),
@@ -221,7 +221,7 @@ class _ProfileState extends State<Profile> {
                                   Get.snackbar(
                                     "Perhatian",
                                     "Silakan masukkan nomor telepon yang valid",
-                                    snackPosition: SnackPosition.BOTTOM,
+                                    snackPosition: SnackPosition.TOP,
                                     isDismissible: false,
                                     backgroundColor: Color(0xFFEEE5FF),
                                     duration: const Duration(seconds: 3),
@@ -324,7 +324,7 @@ class _ProfileState extends State<Profile> {
                                                     Get.snackbar(
                                                       "Perhatian",
                                                       result.message,
-                                                      snackPosition: SnackPosition.BOTTOM,
+                                                      snackPosition: SnackPosition.TOP,
                                                       isDismissible: false,
                                                       backgroundColor: Color(0xFFEEE5FF),
                                                       duration: const Duration(seconds: 3),
@@ -421,7 +421,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Lottie.asset("assets/lotties/check.json", height: 200),
                 Text(
-                  "Data Berhasil Diganti",
+                  "Data Berhasil DIganti",
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 )
               ],

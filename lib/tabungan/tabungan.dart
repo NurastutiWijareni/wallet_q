@@ -17,7 +17,6 @@ class Tabungan extends StatefulWidget {
 }
 
 class _TabunganState extends State<Tabungan> {
-  // collect user input
   final _textcontrollerAMOUNT = TextEditingController();
   final _textcontrollerITEM = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -61,13 +60,13 @@ class _TabunganState extends State<Tabungan> {
       });
     }
 
-    // enter the new transaction into the spreadsheet
     void _enterTransaction(bool _isIncome) {
       TabungansServices.createTabungan(
         users!.id,
         int.parse(_textcontrollerAMOUNT.text),
         _textcontrollerITEM.text,
         (_isIncome) ? "Pemasukan" : "Pengeluaran",
+        DateTime.now().millisecondsSinceEpoch,
       );
       setState(() {
         isLoaded = false;
@@ -77,7 +76,6 @@ class _TabunganState extends State<Tabungan> {
       });
     }
 
-    // new transaction
     void _newTransaction() {
       showDialog(
         barrierDismissible: false,
@@ -96,6 +94,7 @@ class _TabunganState extends State<Tabungan> {
                           const Text('Pengeluaran'),
                           Switch(
                             value: _isIncome,
+                            activeColor: Colors.pink[200],
                             onChanged: (newValue) {
                               setState(() {
                                 _isIncome = newValue;
@@ -114,6 +113,7 @@ class _TabunganState extends State<Tabungan> {
                             child: Form(
                               key: _formKey,
                               child: TextFormField(
+                                keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Jumlah',
@@ -139,7 +139,7 @@ class _TabunganState extends State<Tabungan> {
                             child: TextField(
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: 'Untuk',
+                                hintText: 'Deskripsi',
                               ),
                               controller: _textcontrollerITEM,
                             ),
@@ -151,14 +151,14 @@ class _TabunganState extends State<Tabungan> {
                 ),
                 actions: <Widget>[
                   MaterialButton(
-                    color: Colors.grey[600],
+                    color: Colors.pink[300],
                     child: const Text('Cancel', style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
                   MaterialButton(
-                    color: Colors.grey[600],
+                    color: Colors.pink[300],
                     child: const Text('Enter', style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -212,40 +212,38 @@ class _TabunganState extends State<Tabungan> {
                         height: 20,
                       ),
                       Expanded(
-                        // child: GoogleSheetsApi.loading == true
-                        //     ? LoadingCircle()
-                        // :
                         child: ListView.builder(
-                            itemCount: tabungans.length,
-                            itemBuilder: (context, index) {
-                              return Dismissible(
-                                key: UniqueKey(),
-                                onDismissed: (direction) {
-                                  // Remove the item from the data source.
-                                  TabungansServices.deleteTabungan(
-                                    tabungans[index].id,
-                                    tabungans[index].amount,
-                                    tabungans[index].description,
-                                    tabungans[index].category,
-                                  );
-                                  setState(() {
-                                    isLoaded = false;
-                                  });
-                                },
-                                background: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.red,
-                                  ),
-                                  padding: EdgeInsets.all(15.0),
+                          itemCount: tabungans.length,
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                TabungansServices.deleteTabungan(
+                                  tabungans[index].id,
+                                  tabungans[index].amount,
+                                  tabungans[index].description,
+                                  tabungans[index].category,
+                                  tabungans[index].time.toString(),
+                                );
+                                setState(() {
+                                  isLoaded = false;
+                                });
+                              },
+                              background: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red,
                                 ),
-                                child: MyTransaction(
-                                  transactionName: tabungans[index].description,
-                                  money: tabungans[index].amount.toString(),
-                                  expenseOrIncome: tabungans[index].category,
-                                ),
-                              );
-                            }),
+                                padding: EdgeInsets.all(15.0),
+                              ),
+                              child: MyTransaction(
+                                transactionName: tabungans[index].description,
+                                money: tabungans[index].amount.toString(),
+                                expenseOrIncome: tabungans[index].category,
+                              ),
+                            );
+                          },
+                        ),
                       )
                     ],
                   ),

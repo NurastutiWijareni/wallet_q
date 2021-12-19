@@ -4,13 +4,13 @@ import 'tabungans.dart';
 class TabungansServices {
   static CollectionReference TabungansCollection = FirebaseFirestore.instance.collection("tabungans");
 
-  static Future<void> createTabungan(String id, int amount, String description, String category) async {
-    await TabungansCollection.doc(id + amount.toString() + description + category).set({
+  static Future<void> createTabungan(String id, int amount, String description, String category, int dateTime) async {
+    await TabungansCollection.doc(id + amount.toString() + description + category + dateTime.toString()).set({
       "userID": id,
       "amount": amount,
       "description": description,
       "category": category,
-      "time": DateTime.now().millisecondsSinceEpoch,
+      "time": dateTime,
     });
   }
 
@@ -24,14 +24,14 @@ class TabungansServices {
         document.get("amount"),
         document.get("description"),
         document.get("category"),
-        DateTime.fromMillisecondsSinceEpoch(document.get("time")),
+        document.get("time"),
       ));
     }
 
     return tabungans;
   }
 
-  static Future<void> deleteTabungan(String id, int amount, String description, String category) async {
-    await TabungansCollection.doc(id + amount.toString() + description + category).delete();
+  static Future<void> deleteTabungan(String id, int amount, String description, String category, String dateTime) async {
+    await TabungansCollection.doc(id + amount.toString() + description + category + dateTime).delete();
   }
 }

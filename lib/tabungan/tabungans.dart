@@ -3,7 +3,7 @@ class Tabungans {
   final int amount;
   final String description;
   final String category;
-  final DateTime time;
+  final int time;
 
   Tabungans(
     this.id,
