@@ -1,6 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wallet_q/dream%20saver/dream_saver_services.dart';
+import 'package:wallet_q/dream%20saver/dream_savers.dart';
+import 'package:wallet_q/users_services.dart';
 import 'package:web_scraper/web_scraper.dart';
 
 import 'dream_saver_result.dart';
@@ -12,9 +19,30 @@ class DreamSaver extends StatefulWidget {
 
 class _DreamSaverState extends State<DreamSaver> {
   TextEditingController searchController = TextEditingController();
+  List<DreamSavers>? dreamSavers;
+  bool isLoaded = false, hasDreamSaver = false;
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+    if (!isLoaded) {
+      UsersServices.readUser(user.uid).then(
+        (value) {
+          try {
+            DreamSaversServices.readDreamSaver(user.uid).then(
+              (value) {
+                setState(
+                  () {
+                    dreamSavers = value;
+                    isLoaded = true;
+                  },
+                );
+              },
+            );
+          } catch (e) {}
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -82,11 +110,11 @@ class _DreamSaverState extends State<DreamSaver> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Center(
-                          child: Image.asset(
-                            "assets/images/15.png",
-                            width: MediaQuery.of(context).size.width / 3,
+                          child: Lottie.asset(
+                            "assets/lotties/link.json",
+                            width: MediaQuery.of(context).size.width / 2,
                           ),
                         ),
                       ),
@@ -112,12 +140,12 @@ class _DreamSaverState extends State<DreamSaver> {
                               Get.snackbar(
                                 "Perhatian",
                                 "Silakan isi link terlebih dahulu",
-                                snackPosition: SnackPosition.TOP,
+                                snackPosition: SnackPosition.BOTTOM,
                                 isDismissible: false,
-                                backgroundColor: Color(0xFFEEE5FF),
+                                backgroundColor: Color(0xFFFF98CE),
                                 duration: const Duration(seconds: 3),
                                 margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                                colorText: Colors.black,
+                                colorText: Colors.white,
                                 borderRadius: 16,
                               );
                             } else if (!Uri.parse(searchController.text).isAbsolute) {
@@ -126,14 +154,101 @@ class _DreamSaverState extends State<DreamSaver> {
                                 "Silakan isi link yang valid",
                                 snackPosition: SnackPosition.TOP,
                                 isDismissible: false,
-                                backgroundColor: Color(0xFFEEE5FF),
+                                backgroundColor: Color(0xFFFF98CE),
                                 duration: const Duration(seconds: 3),
                                 margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                                colorText: Colors.black,
+                                colorText: Colors.white,
                                 borderRadius: 16,
                               );
+                            } else if (searchController.text.substring(0, 25) != "https://www.tokopedia.com") {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Color(0xFFFF98CE),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                    elevation: 16,
+                                    content: Container(
+                                      height: 250,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Silahkan masukkan link tokopedia yang valid:",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              String url =
+                                                  "https://www.tokopedia.com/belajar-php/buku-belajar-pemrograman-kotlin-android-bahasa-indonesia-goodie-bag?whid=0";
+                                              if (await canLaunch(url)) {
+                                                await launch(url);
+                                              } else {
+                                                // can't launch url
+                                              }
+                                            },
+                                            child: Text(
+                                              "https://www.tokopedia.com/belajar-php/buku-belajar-pemrograman-kotlin-android-bahasa-indonesia-goodie-bag?whid=0",
+                                              style: TextStyle(
+                                                color: Colors.blue.shade400,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: Colors.blue,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             } else {
-                              Get.to(() => DreamSaverResult(link: searchController.text));
+                              for (int i = 0; i < dreamSavers!.length; i++) {
+                                if (dreamSavers![i].sourceLink == searchController.text) {
+                                  hasDreamSaver = true;
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        backgroundColor: Color(0xFFFF98CE),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                        elevation: 16,
+                                        content: Container(
+                                          height: 250,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "Barang yang kamu masukkan sudah ada",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  break;
+                                } else {
+                                  hasDreamSaver = false;
+                                }
+                              }
+                              if (!hasDreamSaver) {
+                                Get.to(() => DreamSaverResult(link: searchController.text));
+                              }
                             }
                           },
                           provideHapticFeedback: true,

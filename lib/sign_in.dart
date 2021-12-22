@@ -143,36 +143,36 @@ class _SignInFormState extends State<SignInForm> {
                         Get.snackbar(
                           "Perhatian",
                           "Silakan isi seluruh data",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
-                          backgroundColor: Color(0xFFEEE5FF),
+                          backgroundColor: Color(0xFFFF98CE),
                           duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                          colorText: Colors.black,
+                          colorText: Colors.white,
                           borderRadius: 16,
                         );
                       } else if (passwordController.text.length < 8) {
                         Get.snackbar(
                           "Perhatian",
                           "Panjang password minimal 8 karakter",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
-                          backgroundColor: Color(0xFFEEE5FF),
+                          backgroundColor: Color(0xFFFF98CE),
                           duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                          colorText: Colors.black,
+                          colorText: Colors.white,
                           borderRadius: 16,
                         );
                       } else if (!(EmailValidator.validate(emailController.text))) {
                         Get.snackbar(
                           "Perhatian",
                           "Silakan masukkan email anda",
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           isDismissible: false,
-                          backgroundColor: Color(0xFFEEE5FF),
+                          backgroundColor: Color(0xFFFF98CE),
                           duration: const Duration(seconds: 3),
                           margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                          colorText: Colors.black,
+                          colorText: Colors.white,
                           borderRadius: 16,
                         );
                       } else {
@@ -184,12 +184,12 @@ class _SignInFormState extends State<SignInForm> {
                           Get.snackbar(
                             "Perhatian",
                             result.message,
-                            snackPosition: SnackPosition.TOP,
+                            snackPosition: SnackPosition.BOTTOM,
                             isDismissible: false,
-                            backgroundColor: Color(0xFFEEE5FF),
+                            backgroundColor: Color(0xFFFF98CE),
                             duration: const Duration(seconds: 3),
                             margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                            colorText: Colors.black,
+                            colorText: Colors.white,
                             borderRadius: 16,
                           );
                           setState(() {

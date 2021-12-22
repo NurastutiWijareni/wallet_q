@@ -5,12 +5,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_q/dream%20saver/dream_saver_services.dart';
+import 'package:wallet_q/dream%20saver/dream_saver_view.dart';
 import 'package:wallet_q/home.dart';
+import 'package:wallet_q/notification_api.dart';
+import 'package:wallet_q/notification_api1.dart';
 
 import '../users.dart';
 import '../users_services.dart';
 
-enum TimeSaving { tiga_bulan, enam_bulan, sembilan_bulan, duabelas_bulan }
+enum TimeSaving { test, tiga_bulan, enam_bulan, sembilan_bulan, duabelas_bulan }
 
 class DreamSaverSave2 extends StatefulWidget {
   const DreamSaverSave2({Key? key, required this.title, required this.price, required this.imageLink, required this.link})
@@ -30,6 +33,19 @@ class _DreamSaverSave2State extends State<DreamSaverSave2> {
   TimeSaving? _timeSaving = TimeSaving.tiga_bulan;
 
   DateTime dateTime = DateTime(DateTime.now().year, DateTime.now().month + 3, DateTime.now().day);
+
+  @override
+  void initState() {
+    super.initState();
+
+    NotificationApi1.init(initScheduled: true);
+    listenNotifications();
+  }
+
+  void listenNotifications() => NotificationApi1.onNotifications.stream.listen(onClickNotification);
+
+  void onClickNotification(String? payload) => Get.to(() => Home());
+
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
@@ -147,6 +163,33 @@ class _DreamSaverSave2State extends State<DreamSaverSave2> {
                           ),
                           SizedBox(
                             height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "-10 Hari (test)",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Radio<TimeSaving>(
+                                value: TimeSaving.test,
+                                groupValue: _timeSaving,
+                                activeColor: Color(0xFF009789),
+                                onChanged: (TimeSaving? value) {
+                                  setState(
+                                    () {
+                                      _timeSaving = value;
+                                      isChecked = true;
+                                      dateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - 10);
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,6 +317,14 @@ class _DreamSaverSave2State extends State<DreamSaverSave2> {
                                     widget.link,
                                     dateTime.millisecondsSinceEpoch,
                                     DateTime.now().millisecondsSinceEpoch,
+                                  );
+                                  NotificationApi1.showScheduledNotification(
+                                    title: "Katanya Dimimpiin, Kok Dianggurin",
+                                    body: 'Ayo ${users!.name}, capai mimpi-mu sekarang!',
+                                    payload: 'target.tabungan',
+                                    scheduledDate: DateTime.now().add(
+                                      Duration(seconds: 10),
+                                    ),
                                   );
                                   Get.offAll(() => Home());
                                 },

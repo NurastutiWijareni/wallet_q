@@ -5,6 +5,7 @@ class Users {
   final String email;
   final String phoneNumber;
   final String profilePicture;
+  final int points;
 
   Users(
     this.id,
@@ -13,5 +14,6 @@ class Users {
     required this.username,
     required this.phoneNumber,
     required this.profilePicture,
+    required this.points,
   });
 }

@@ -209,24 +209,24 @@ class _ProfileState extends State<Profile> {
                                   Get.snackbar(
                                     "Perhatian",
                                     "Silakan isi seluruh data yang diminta",
-                                    snackPosition: SnackPosition.TOP,
+                                    snackPosition: SnackPosition.BOTTOM,
                                     isDismissible: false,
-                                    backgroundColor: Color(0xFFEEE5FF),
+                                    backgroundColor: Color(0xFFFF98CE),
                                     duration: const Duration(seconds: 3),
                                     margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                                    colorText: Colors.black,
+                                    colorText: Colors.white,
                                     borderRadius: 16,
                                   );
-                                } else if (!RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(noTelpController.text)) {
+                                } else if (!RegExp(r'(^(\+62|62|0)8[1-9][0-9]{6,9}$)').hasMatch(noTelpController.text)) {
                                   Get.snackbar(
                                     "Perhatian",
                                     "Silakan masukkan nomor telepon yang valid",
-                                    snackPosition: SnackPosition.TOP,
+                                    snackPosition: SnackPosition.BOTTOM,
                                     isDismissible: false,
-                                    backgroundColor: Color(0xFFEEE5FF),
+                                    backgroundColor: Color(0xFFFF98CE),
                                     duration: const Duration(seconds: 3),
                                     margin: const EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 0),
-                                    colorText: Colors.black,
+                                    colorText: Colors.white,
                                     borderRadius: 16,
                                   );
                                 } else if (profilePicture == null) {
@@ -236,10 +236,10 @@ class _ProfileState extends State<Profile> {
                                   if (users!.profilePicture == "") {
                                     String profileLink = "";
                                     await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
-                                        noTelpController.text, profileLink);
+                                        noTelpController.text, profileLink, users!.points);
                                   } else {
                                     await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
-                                        noTelpController.text, users!.profilePicture);
+                                        noTelpController.text, users!.profilePicture, users!.points);
                                   }
                                   setState(() {
                                     isLoaded = false;
@@ -255,7 +255,7 @@ class _ProfileState extends State<Profile> {
                                     await deleteFileFromFirebaseByUrl(users!.profilePicture);
                                   }
                                   await UsersServices.updateUser(user!.uid, user.email, nameController.text, usernameController.text,
-                                      noTelpController.text, profileLink);
+                                      noTelpController.text, profileLink, users!.points);
                                   setState(() {
                                     isLoaded = false;
                                     isPressed = !isPressed;
@@ -324,7 +324,7 @@ class _ProfileState extends State<Profile> {
                                                     Get.snackbar(
                                                       "Perhatian",
                                                       result.message,
-                                                      snackPosition: SnackPosition.TOP,
+                                                      snackPosition: SnackPosition.BOTTOM,
                                                       isDismissible: false,
                                                       backgroundColor: Color(0xFFEEE5FF),
                                                       duration: const Duration(seconds: 3),
@@ -411,7 +411,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF14FF00),
+          backgroundColor: Colors.pink.shade100,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 16,
           content: Container(
@@ -419,7 +419,7 @@ class _ProfileState extends State<Profile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset("assets/lotties/check.json", height: 200),
+                Lottie.asset("assets/lotties/2.json", height: 200),
                 Text(
                   "Data Berhasil DIganti",
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
@@ -574,7 +574,7 @@ class _ProfileState extends State<Profile> {
 
   TextFormField buildNoTelpFormField() {
     return TextFormField(
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.phone,
       controller: noTelpController,
       cursorColor: Colors.black,
       style: const TextStyle(

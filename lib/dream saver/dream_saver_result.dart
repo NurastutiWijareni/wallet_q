@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:web_scraper/web_scraper.dart';
-
 import 'dream_saver_save1.dart';
 
 class DreamSaverResult extends StatefulWidget {
@@ -25,21 +25,51 @@ class _DreamSaverResultState extends State<DreamSaverResult> {
   String title = "", imageLink = "", price = "";
 
   void fetchProducts() async {
-    if (await webScraper.loadWebPage(widget.link.substring(25, widget.link.length))) {
-      setState(() {
-        productImages = webScraper.getElement(
-            'div.css-856ghu > div.css-4xe7jo > div.css-6jnsk6 > div.css-1nchjne > div.css-1q3zvcj > div.css-cbnyzd > div.css-1y5a13 > img',
-            ['src']);
-        imageLink = productImages![0]['attributes']['src'];
+    try {
+      if (await webScraper.loadWebPage(widget.link.substring(25, widget.link.length))) {
+        setState(() {
+          productImages = webScraper.getElement(
+              'div.css-856ghu > div.css-4xe7jo > div.css-6jnsk6 > div.css-1nchjne > div.css-1q3zvcj > div.css-cbnyzd > div.css-1y5a13 > img',
+              ['src']);
+          imageLink = productImages![0]['attributes']['src'];
 
-        productPrices = webScraper
-            .getElement('div.css-856ghu > div.css-4xe7jo > div.css-1fogemr > div.css-jmbq56 > div.css-aqsd8m > div.price', ['class']);
-        price = productPrices![0]['title'];
+          productPrices = webScraper
+              .getElement('div.css-856ghu > div.css-4xe7jo > div.css-1fogemr > div.css-jmbq56 > div.css-aqsd8m > div.price', ['class']);
+          price = productPrices![0]['title'];
 
-        productTitles =
-            webScraper.getElement('div.css-856ghu > div.css-4xe7jo > div.css-1fogemr > div.css-jmbq56 > h1.css-1wtrxts', ['class']);
-        title = productTitles![0]['title'];
-      });
+          productTitles =
+              webScraper.getElement('div.css-856ghu > div.css-4xe7jo > div.css-1fogemr > div.css-jmbq56 > h1.css-1wtrxts', ['class']);
+          title = productTitles![0]['title'];
+        });
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Color(0xFFFF98CE),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 16,
+            content: Container(
+              height: 250,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Barang yang anda cari tidak ada, pastikan link tokopedia yang anda masukkan valid",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -117,9 +147,11 @@ class _DreamSaverResultState extends State<DreamSaverResult> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 18.0),
                   child: (productImages == null || productPrices == null || productTitles == null)
-                      ? const SpinKitFadingCircle(
-                          color: Colors.white,
-                          size: 50,
+                      ? Center(
+                          child: Lottie.asset(
+                            "assets/lotties/search.json",
+                            width: MediaQuery.of(context).size.width / 1.5,
+                          ),
                         )
                       : SizedBox(
                           width: MediaQuery.of(context).size.width,

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dream_savers.dart';
 
 class DreamSaversServices {
-  static CollectionReference DreamSaversCollection = FirebaseFirestore.instance.collection("DreamSavers");
+  static CollectionReference DreamSaversCollection = FirebaseFirestore.instance.collection("dreamSavers");
 
   static Future<void> createDreamSaver(
     String id,
@@ -48,5 +48,9 @@ class DreamSaversServices {
     }
 
     return dreamSavers;
+  }
+
+  static Future<void> deleteDreamSaver(String id, int amountTarget, String timeCreated) async {
+    await DreamSaversCollection.doc(id + amountTarget.toString() + timeCreated).delete();
   }
 }

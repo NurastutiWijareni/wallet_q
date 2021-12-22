@@ -5,7 +5,7 @@ import 'auth_services.dart';
 class UsersServices {
   static CollectionReference usersCollection = FirebaseFirestore.instance.collection("users");
 
-  static Future<void> createUser(id, email, name, username, phoneNumber, profilePicture) async {
+  static Future<void> createUser(id, email, name, username, phoneNumber, profilePicture, points) async {
     await usersCollection.doc(id).set({
       "userID": id,
       "email": email,
@@ -13,6 +13,7 @@ class UsersServices {
       "username": username,
       "phoneNumber": phoneNumber,
       "profilePicture": profilePicture,
+      "points": points,
     });
   }
 
@@ -29,10 +30,11 @@ class UsersServices {
       username: querySnapshot.docs[0].get('username'),
       phoneNumber: querySnapshot.docs[0].get('phoneNumber'),
       profilePicture: querySnapshot.docs[0].get('profilePicture'),
+      points: querySnapshot.docs[0].get('points'),
     );
   }
 
-  static Future<void> updateUser(id, email, name, username, phoneNumber, profilePicture) async {
+  static Future<void> updateUser(id, email, name, username, phoneNumber, profilePicture, points) async {
     await usersCollection.doc(id).update({
       "userID": id,
       "email": email,
@@ -40,6 +42,7 @@ class UsersServices {
       "username": username,
       "phoneNumber": phoneNumber,
       "profilePicture": profilePicture,
+      "points": points,
     });
   }
 

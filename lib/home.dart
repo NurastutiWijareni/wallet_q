@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet_q/dream%20saver/dream_saver_view.dart';
+import 'package:wallet_q/notification_api.dart';
 import 'package:wallet_q/profile.dart';
 import 'package:wallet_q/reminder.dart';
+import 'package:wallet_q/riwayat/riwayat.dart';
 import 'package:wallet_q/target%20tabungan/target_tabungan.dart';
-
 import 'dream saver/dream_saver.dart';
 import 'tabungan/tabungan.dart';
 import 'tabungan/tabungan_services.dart';
@@ -30,6 +32,18 @@ class _HomeState extends State<Home> {
   int income = 0;
   int expense = 0;
   bool _isIncome = false, isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    NotificationApi.init(initScheduled: true);
+    listenNotifications();
+  }
+
+  void listenNotifications() => NotificationApi.onNotifications.stream.listen(onClickNotification);
+
+  void onClickNotification(String? payload) => Get.to(() => Home());
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +165,27 @@ class _HomeState extends State<Home> {
                                                     width: 10,
                                                   ),
                                                   Image.asset(
-                                                    "assets/images/6.png",
+                                                    (data.points < 100)
+                                                        ? "assets/images/6.png"
+                                                        : (data.points < 250)
+                                                            ? "assets/images/18.png"
+                                                            : "assets/images/19.png",
                                                     width: 35,
-                                                  )
+                                                  ),
+                                                  Text(
+                                                    (data.points < 100)
+                                                        ? "(Ambisius)"
+                                                        : (data.points < 250)
+                                                            ? "(Profesional)"
+                                                            : "(Expert)",
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      fontFamily: "Inter",
+                                                      color: Color(0xFFFF98CE),
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
                                                 ],
                                               )
                                             : Row(
@@ -166,9 +198,27 @@ class _HomeState extends State<Home> {
                                                     width: 10,
                                                   ),
                                                   Image.asset(
-                                                    "assets/images/6.png",
+                                                    (data.points < 100)
+                                                        ? "assets/images/6.png"
+                                                        : (data.points < 250)
+                                                            ? "assets/images/18.png"
+                                                            : "assets/images/19.png",
                                                     width: 35,
-                                                  )
+                                                  ),
+                                                  Text(
+                                                    (data.points < 100)
+                                                        ? "(Ambisius)"
+                                                        : (data.points < 250)
+                                                            ? "(Profesional)"
+                                                            : "(Expert)",
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      fontFamily: "Inter",
+                                                      color: Color(0xFFFF98CE),
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                       );
@@ -263,38 +313,38 @@ class _HomeState extends State<Home> {
                           //   height: 1,
                           //   color: Colors.black,
                           // ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: ElevatedButton(
-                              child: Row(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/8.png",
-                                    width: 60,
-                                  ),
-                                  const SizedBox(
-                                    width: 18.0,
-                                  ),
-                                  const Text(
-                                    "Tabungan",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onPressed: () async {},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 15),
-                                  textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
-                            ),
-                          ),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(5),
+                          //   child: ElevatedButton(
+                          //     child: Row(
+                          //       // mainAxisAlignment: MainAxisAlignment.start,
+                          //       children: [
+                          //         Image.asset(
+                          //           "assets/images/8.png",
+                          //           width: 60,
+                          //         ),
+                          //         const SizedBox(
+                          //           width: 18.0,
+                          //         ),
+                          //         const Text(
+                          //           "Reminder",
+                          //           textAlign: TextAlign.left,
+                          //           style: TextStyle(
+                          //             fontFamily: "Inter",
+                          //             color: Colors.black,
+                          //             fontSize: 16,
+                          //             fontWeight: FontWeight.w600,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     onPressed: () async {},
+                          //     style: ElevatedButton.styleFrom(
+                          //         primary: Colors.white,
+                          //         padding: const EdgeInsets.symmetric(vertical: 15),
+                          //         textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
+                          //   ),
+                          // ),
                           // Divider(
                           //   height: 1,
                           //   color: Colors.black,
@@ -306,14 +356,14 @@ class _HomeState extends State<Home> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.asset(
-                                    "assets/images/9.png",
+                                    "assets/images/20.png",
                                     width: 60,
                                   ),
                                   const SizedBox(
                                     width: 18.0,
                                   ),
                                   const Text(
-                                    "Pengaturan",
+                                    "Tentang",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontFamily: "Inter",
@@ -324,7 +374,32 @@ class _HomeState extends State<Home> {
                                   ),
                                 ],
                               ),
-                              onPressed: () async {},
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Color(0xFFFFC0CB),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      elevation: 16,
+                                      content: SizedBox(
+                                        height: 250,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              "Developed by TeamTam\n\nNurastuti Wijareni\nLaode Ghazy Naufal Iksyam\nRio Yuda Sakti\nMuchammad Okto Nugroho\nRusydi Nurdin",
+                                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.white,
                                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -374,6 +449,82 @@ class _HomeState extends State<Home> {
                           //   height: 1,
                           //   color: Colors.black,
                           // ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: ElevatedButton(
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/21.png",
+                                    width: 60,
+                                  ),
+                                  const SizedBox(
+                                    width: 18.0,
+                                  ),
+                                  const Text(
+                                    "Test Target Notifikasi",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                NotificationApi.showNotification(
+                                  title: "Target Tabungan Kangen Kamu Nih",
+                                  body: 'Ayo ${users!.name}, capai target-mu sekarang!',
+                                  payload: 'target.tabungan',
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 15),
+                                  textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: ElevatedButton(
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/21.png",
+                                    width: 60,
+                                  ),
+                                  const SizedBox(
+                                    width: 18.0,
+                                  ),
+                                  const Text(
+                                    "Test Dream Saver Notifikasi",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                NotificationApi.showNotification(
+                                  title: "Katanya Dimimpiin, Kok Dianggurin",
+                                  body: 'Ayo ${users!.name}, capai mimpi-mu sekarang!',
+                                  payload: 'target.tabungan',
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 15),
+                                  textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -383,80 +534,87 @@ class _HomeState extends State<Home> {
             ),
           ),
           appBar: appBar,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 25,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 10,
-                  child: Text(
-                    "Saldo Yang Dimiliki\n Rp. ${(amount < 0) ? 0 : amount.toString()}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: "Inter",
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+          body: Column(
+            children: [
+              SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 10,
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    // Lottie.asset("assets/lotties/1.json", height: 75),
+                    Center(
+                      child: Text(
+                        "Saldo Yang Dimiliki\n Rp. ${(amount < 0) ? 0 : amount.toString()}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Inter",
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 9 / 12 - appBar.preferredSize.height - 49,
+                padding: const EdgeInsets.all(28.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 9 / 10 - appBar.preferredSize.height - 49,
-                  padding: const EdgeInsets.all(28.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MenuButton(
+                          lottie: "assets/lotties/1.json",
+                          text: "Dream Saver",
+                          toPage: "Dream Saver",
+                        ),
+                        SizedBox(
+                          width: 50,
+                        ),
+                        MenuButton(
+                          lottie: "assets/lotties/3.json",
+                          text: "Riwayat",
+                          toPage: "Riwayat",
+                        ),
+                      ],
                     ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MenuButton(
-                            image: "assets/images/11.png",
-                            text: "Dream Saver",
-                            toPage: "Dream Saver",
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          MenuButton(
-                            image: "assets/images/12.png",
-                            text: "Reminder",
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Row(
-                        children: [
-                          MenuButton(
-                            image: "assets/images/13.png",
-                            text: "Tabungan",
-                            toPage: "Tabungan",
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          MenuButton(
-                            image: "assets/images/14.png",
-                            text: "Target Tabungan",
-                            toPage: "Target Tabungan",
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      children: [
+                        MenuButton(
+                          lottie: "assets/lotties/tabungan.json",
+                          text: "Tabungan",
+                          toPage: "Tabungan",
+                        ),
+                        SizedBox(
+                          width: 50,
+                        ),
+                        MenuButton(
+                          lottie: "assets/lotties/target tabungan.json",
+                          text: "Target Tabungan",
+                          toPage: "Target Tabungan",
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -465,9 +623,10 @@ class _HomeState extends State<Home> {
 }
 
 class MenuButton extends StatelessWidget {
-  const MenuButton({Key? key, this.image, this.text, this.toPage}) : super(key: key);
+  const MenuButton({Key? key, this.lottie, this.text, this.toPage}) : super(key: key);
 
-  final String? image;
+  final String? lottie;
+  // final String? image;
   final String? text;
   final String? toPage;
 
@@ -483,9 +642,11 @@ class MenuButton extends StatelessWidget {
           } else if (toPage == "Dream Saver") {
             Get.to(() => DreamSaverView());
           } else if (toPage == "Reminder") {
-            Get.to(() => Reminder());
+            NotificationApi.showNotification(title: "test", body: "testttt", payload: 'test.test');
           } else if (toPage == "Tabungan") {
             Get.to(() => Tabungan());
+          } else if (toPage == "Riwayat") {
+            Get.to(() => Riwayat());
           }
         },
         provideHapticFeedback: true,
@@ -502,8 +663,11 @@ class MenuButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              image!,
+            // Image.asset(
+            //   image!,
+            // ),
+            Lottie.asset(
+              lottie!,
             ),
             Text(
               text!,
